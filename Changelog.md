@@ -5,7 +5,7 @@ How to update your code:
  * Change every ``keccak256(a, b, c)`` to ``keccak256(abi.encodePacked(a, b, c))``.
  * Add ``public`` to every function and ``external`` to every fallback or interface function that does not specify its visibility already.
  * Make your fallback functions ``external``.
- * Explicitly state the storage location for local variables of struct and array types, e.g. change ``uint[] x = m_x`` to ``uint[] storage x = m_x``.
+ * Explicitly state the data location for all variables of struct, array or mapping types (including function parameters), e.g. change ``uint[] x = m_x`` to ``uint[] storage x = m_x``. Note that ``external`` functions require parameters with a data location of ``calldata``.
  * Explicitly convert values of contract type to addresses before using an ``address`` member. Example: if ``c`` is a contract, change ``c.transfer(...)`` to ``address(c).transfer(...)``.
 
 Breaking Changes:
