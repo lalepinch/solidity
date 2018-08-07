@@ -54,6 +54,7 @@ Breaking Changes:
  * Type Checker: Disallow calling constructor with wrong argument count. This was already the case in the experimental 0.5.0 mode.
  * Type Checker: Disallow uninitialized storage variables. This was already the case in the experimental 0.5.0 mode.
  * Type Checker: Detecting cyclic dependencies in variables and structs is limited in recursion to 256.
+ * Type Checker: Require explicit data location for all variables, including function parameters. This was partly already the case in the experimental 0.5.0 mode.
  * Type Checker: Only accept a single ``bytes`` type for ``.call()`` (and family), ``keccak256()``, ``sha256()`` and ``ripemd160()``.
  * Type Checker: Fallback function must be external. This was already the case in the experimental 0.5.0 mode.
  * Type Checker: Interface functions must be declared external. This was already the case in the experimental 0.5.0 mode.
@@ -61,7 +62,7 @@ Breaking Changes:
  * Type Checker: Disallow "loose assembly" syntax entirely. This means that jump labels, jumps and non-functional instructions cannot be used anymore.
  * Type System: Disallow explicit and implicit conversions from decimal literals to ``bytesXX`` types.
  * Type System: Disallow explicit and implicit conversions from hex literals to ``bytesXX`` types of different size.
- * Remove obsolete ``std`` directory from the Solidity repository. This means accessing ``https://github.com/ethereum/soldity/blob/develop/std/*.sol`` (or ``https://github.com/ethereum/solidity/std/*.sol`` in Remix) will not be possible.
+ * Remove obsolete ``std`` directory from the Solidity repository. This means accessing ``https://github.com/ethereum/solidity/blob/develop/std/*.sol`` (or ``https://github.com/ethereum/solidity/std/*.sol`` in Remix) will not be possible.
  * References Resolver: Turn missing storage locations into an error. This was already the case in the experimental 0.5.0 mode.
  * Syntax Checker: Disallow functions without implementation to use modifiers. This was already the case in the experimental 0.5.0 mode.
  * Syntax Checker: Named return values in function types are an error.
