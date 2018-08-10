@@ -4576,6 +4576,61 @@ BOOST_AUTO_TEST_CASE(constructing_enums_from_ints)
 	ABI_CHECK(callContractFunction("test()"), encodeArgs(1));
 }
 
+BOOST_AUTO_TEST_CASE(struct_referencing)
+{
+	static char const* sourceCode = R"(
+		pragma experimental ABIEncoderV2;
+		interface I {
+			struct S { int a; }
+		}
+		library L {
+			struct S { int a; }
+			function f() public pure returns (S) {
+				S memory s;
+				s.a = 3;
+				return s;
+			}
+			function g() public pure returns (I.S) {
+				I.S memory s;
+				s.a = 4;
+				return s;
+			}
+		}
+		contract C is I {
+			function f() public pure returns (S) {
+				S memory s;
+				s.a = 1;
+				return s;
+			}
+			function g() public pure returns (I.S) {
+				I.S memory s;
+				s.a = 2;
+				return s;
+			}
+			function h() public pure returns (L.S) {
+				L.S memory s;
+				s.a = 5;
+				return s;
+			}
+			function x() public pure returns (L.S) {
+				return L.f();
+			}
+			function y() public pure returns (I.S) {
+				return L.g();
+			}
+		}
+	)";
+	compileAndRun(sourceCode, 0, "L");
+	ABI_CHECK(callContractFunction("f()"), encodeArgs(3));
+	ABI_CHECK(callContractFunction("g()"), encodeArgs(4));
+	compileAndRun(sourceCode, 0, "C", bytes(), map<string, Address>{ {"L", m_contractAddress}});
+	ABI_CHECK(callContractFunction("f()"), encodeArgs(1));
+	ABI_CHECK(callContractFunction("g()"), encodeArgs(2));
+	ABI_CHECK(callContractFunction("h()"), encodeArgs(5));
+	ABI_CHECK(callContractFunction("x()"), encodeArgs(3));
+	ABI_CHECK(callContractFunction("y()"), encodeArgs(4));
+}
+
 BOOST_AUTO_TEST_CASE(enum_referencing)
 {
 	char const* sourceCode = R"(
