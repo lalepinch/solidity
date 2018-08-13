@@ -630,8 +630,13 @@ bool TypeChecker::visit(FunctionDefinition const& _function)
 	for (ASTPointer<VariableDeclaration> const& var: _function.parameters() + _function.returnParameters())
 	{
 		if (
+			type(*var)->category() == Type::Category::Mapping &&
+			!type(*var)->dataStoredIn(DataLocation::Storage)
+		)
+			m_errorReporter.typeError(var->location(), "Mapping types can only have a data location of \"storage\".");
+		else if (
 			!type(*var)->canLiveOutsideStorage() &&
-			!(_function.visibility() <= FunctionDefinition::Visibility::Internal)
+			_function.visibility() > FunctionDefinition::Visibility::Internal
 		)
 			m_errorReporter.typeError(var->location(), "Type is required to live outside storage.");
 		if (_function.visibility() >= FunctionDefinition::Visibility::Public && !(type(*var)->interfaceType(isLibraryFunction)))
